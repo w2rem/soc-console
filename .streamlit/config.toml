@@ -1,0 +1,168 @@
+# .streamlit/config.toml -- SOC Console, production-tuned.
+# Precedence: CLI flags > environment variables > this file.
+# Verified against: streamlit config show @ 1.64.0.
+# Tokens: near-black canvas, one vermilion family, Manrope + JetBrains Mono
+# self-hosted (needs server.enableStaticServing + a RESTART for fontFaces).
+
+[global]
+# We launch with `python main.py`; silence the bare-mode warning.
+showWarningOnDirectExecution = false
+
+[server]
+headless = true
+# Do not rescan the filesystem in production; saves RAM + CPU.
+fileWatcherType = "none"
+# Keep both on. They are INDEPENDENT: XSRF does not imply CORS, and
+# disabling CORS opens the WebSocket to any origin.
+enableCORS = true
+enableXsrfProtection = true
+# Serve ./static/ (self-hosted fonts) through the app.
+enableStaticServing = true
+maxUploadSize = 200
+
+[client]
+# "full" | "stacktrace" | "type" | "none" -- never ship "full" to the public.
+showErrorDetails = "type"
+toolbarMode = "viewer"
+
+[browser]
+gatherUsageStats = false
+
+[runner]
+fastReruns = true
+enforceSerializableSessionState = false
+
+[theme]
+base = "dark"
+# CONTRAST: bright #FF7A18 on white text is ~3.6:1 and FAILS AA.
+# primaryColor is the darker ramp stop (~5.1:1); #FF7A18 lives in
+# orangeColor/borders/charts only, never behind text.
+primaryColor = "#C2410C"
+backgroundColor = "#0B0D12"
+secondaryBackgroundColor = "#14171F"
+codeBackgroundColor = "#14171F"
+textColor = "#E8EAED"
+linkColor = "#FFAB5C"
+borderColor = "#262C36"
+codeTextColor = "#CBD5E1"
+showWidgetBorder = true
+showSidebarBorder = true
+baseRadius = "6px"
+buttonRadius = "6px"
+
+font = "Manrope, Inter, sans-serif"
+headingFont = "Manrope, Inter, sans-serif"
+codeFont = "'JetBrains Mono', monospace"
+baseFontSize = 14
+baseFontWeight = 400
+codeFontSize = "13px"
+headingFontSizes = ["28px", "22px", "18px", "16px", "14px", "12px"]
+headingFontWeights = [700, 600, 600, 600, 500, 500]
+linkUnderline = false
+
+greenColor = "#34D399"
+redColor = "#F87171"
+yellowColor = "#FBBF24"
+orangeColor = "#FF7A18"
+blueColor = "#60A5FA"
+violetColor = "#A78BFA"
+grayColor = "#94A3B8"
+
+chartCategoricalColors = [
+    "#FF7A18",
+    "#E89A74",
+    "#5E9FC4",
+    "#98A0AE",
+    "#C7A832",
+    "#7A8291",
+]
+
+# Exactly 10 stops, dark -> light. Anything else and the default is silently used.
+chartSequentialColors = [
+    "#1A0E06",
+    "#2E160A",
+    "#4A2010",
+    "#652C11",
+    "#833A13",
+    "#9E4816",
+    "#B85619",
+    "#CE681F",
+    "#E0803A",
+    "#E89A74",
+]
+
+dataframeBorderColor = "#262C36"
+dataframeHeaderBackgroundColor = "#14171F"
+
+[theme.sidebar]
+backgroundColor = "#0B0D12"
+secondaryBackgroundColor = "#14171F"
+codeBackgroundColor = "#14171F"
+textColor = "#E8EAED"
+borderColor = "#262C36"
+primaryColor = "#FF7A18"
+
+# Self-hosted woff2 (latin + cyrillic). One block per file.
+# latin subset
+[[theme.fontFaces]]
+family = "Manrope"
+url = "app/static/fonts/manrope-latin-400.woff2"
+weight = "400"
+style = "normal"
+unicodeRange = "U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD"
+[[theme.fontFaces]]
+family = "Manrope"
+url = "app/static/fonts/manrope-latin-600.woff2"
+weight = "600"
+style = "normal"
+unicodeRange = "U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD"
+[[theme.fontFaces]]
+family = "Manrope"
+url = "app/static/fonts/manrope-latin-700.woff2"
+weight = "700"
+style = "normal"
+unicodeRange = "U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD"
+# cyrillic subset
+[[theme.fontFaces]]
+family = "Manrope"
+url = "app/static/fonts/manrope-cyrillic-400.woff2"
+weight = "400"
+style = "normal"
+unicodeRange = "U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116"
+[[theme.fontFaces]]
+family = "Manrope"
+url = "app/static/fonts/manrope-cyrillic-600.woff2"
+weight = "600"
+style = "normal"
+unicodeRange = "U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116"
+[[theme.fontFaces]]
+family = "Manrope"
+url = "app/static/fonts/manrope-cyrillic-700.woff2"
+weight = "700"
+style = "normal"
+unicodeRange = "U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116"
+# mono, latin + cyrillic
+[[theme.fontFaces]]
+family = "JetBrains Mono"
+url = "app/static/fonts/jetbrains-mono-latin-400.woff2"
+weight = "400"
+style = "normal"
+unicodeRange = "U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD"
+[[theme.fontFaces]]
+family = "JetBrains Mono"
+url = "app/static/fonts/jetbrains-mono-latin-500.woff2"
+weight = "500"
+style = "normal"
+unicodeRange = "U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD"
+[[theme.fontFaces]]
+family = "JetBrains Mono"
+url = "app/static/fonts/jetbrains-mono-cyrillic-400.woff2"
+weight = "400"
+style = "normal"
+unicodeRange = "U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116"
+[[theme.fontFaces]]
+family = "JetBrains Mono"
+url = "app/static/fonts/jetbrains-mono-cyrillic-500.woff2"
+weight = "500"
+style = "normal"
+unicodeRange = "U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116"
